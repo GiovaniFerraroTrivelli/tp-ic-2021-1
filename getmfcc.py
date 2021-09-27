@@ -75,7 +75,8 @@ def get_mfcc(archivo, clase):
 
     mfcc_data = [clase]
     for i in mfcc_feat:
-        mfcc_data.append(np.average(i))
+        mfcc_data.append(np.mean(i))
+        #print(clase, np.average(i))
 
     ### print("Archivo: ", archivo, " - ", mfcc_data)
     return mfcc_data

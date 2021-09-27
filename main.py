@@ -20,21 +20,26 @@ for k in kv:
     for i in onlyfiles:
         mfcc_data = get_mfcc(path + "/" + i, k)
         data.append(mfcc_data)
-        #print(i, k, kv[k], mfcc_data)
+        print(i, k, kv[k], mfcc_data)
 
 data = np.array(data)
 
-train_y = data[0:13, 0]
-train_x = data[0:13, 1:]
+train_y = data[0:, 0]
+train_x = data[0:, 1:]
 
-clase = 2
+print("train_y", train_y)
 
-test_y = [clase]
-test_x = [ get_mfcc("dataset/" + kv[clase] + "/Izquierda_3.wav", clase)[1:] ]
+clase = 3
+
+#test_y = [clase]
+#test_x = [ get_mfcc("dataset/" + kv[clase] + "/derecha4.wav", clase)[1:] ]
+test_y = train_y
+test_x = train_x
 
 RBF_CLASSIFIER = RBF(train_x, train_y, test_x, test_y, num_of_classes=4,
-                     k=4, std_from_clusters=False)
+                     k=4, std_from_clusters=True)
 
-RBF_CLASSIFIER.fit()
+matcheado = RBF_CLASSIFIER.fit()
+print("Matcheo con", matcheado, " => ", kv[matcheado[0]])
 
 print("Prueba realizada con: ", clase, " => ", kv[clase])
