@@ -92,7 +92,7 @@ class RBF:
         return np.array(RBF_list)
 
     def test(self, X):
-        distances = self.rbf_list([ X ], self.centroids, self.std_list)
+        distances = self.rbf_list([X], self.centroids, self.std_list)
         result = distances @ self.w
         return np.argmax(result)
 
@@ -112,7 +112,7 @@ class RBF:
         RBF_X = self.rbf_list(self.X, self.centroids, self.std_list)
 
         # Calcula el peso lineal de cada perceptron
-        print("pruebaaa", self.convert_to_one_hot(self.y, self.number_of_classes))
+        # print("pruebaaa", self.convert_to_one_hot(self.y, self.number_of_classes))
         self.w = np.linalg.pinv(RBF_X.T @ RBF_X) @ RBF_X.T @ self.convert_to_one_hot(self.y, self.number_of_classes)
 
         # EJECUCION
@@ -120,11 +120,21 @@ class RBF:
         RBF_list_tst = self.rbf_list(self.tX, self.centroids, self.std_list)
 
         self.pred_ty = RBF_list_tst @ self.w
-        #print("prueba", self.w)
+        # print("prueba", self.w)
 
         self.pred_ty = np.array([np.argmax(x) for x in self.pred_ty])
 
         diff = self.pred_ty - self.ty
 
         print('Accuracy: ', len(np.where(diff == 0)[0]) / len(diff))
+
+        diff_disc = [[], [], [], []]
+
+        for i in range(len(self.ty)):
+            e = int(self.ty[i])
+            diff_disc[e].append(self.pred_ty[i] - self.ty[i])
+
+        for i in range(len(diff_disc)):
+            print('Accuracy', i, ':', 1 - np.count_nonzero(diff_disc[i]) / len(diff_disc[i]))
+
         return self.pred_ty
